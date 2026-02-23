@@ -1,0 +1,192 @@
+<div class="payment-container">
+  <header class="payment-header">
+    <h1>Payment Gateway</h1>
+    <p>Complete your order securely</p>
+  </header>
+
+  <div class="payment-content">
+    <!-- Customer Information -->
+    <div class="customer-info">
+      <h2>Delivery Information</h2>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your name" [(ngModel)]="customerDetails.name" name="customerName">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="Enter phone number" [(ngModel)]="customerDetails.phone" name="customerPhone">
+      </div>
+      <div class="form-group">
+        <label>Delivery Address</label>
+        <textarea placeholder="Enter delivery address" [(ngModel)]="customerDetails.address" name="customerAddress" rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <div class="order-items">
+        <div *ngFor="let item of cartItems" class="order-item">
+          <img [src]="item.image" [alt]="item.name" class="item-image">
+          <div class="item-details">
+            <h4>{{ item.name }}</h4>
+            <span class="quantity">Qty: {{ item.quantity }}</span>
+          </div>
+          <span class="item-total">₹{{ item.price * item.quantity }}</span>
+        </div>
+      </div>
+      
+      <div class="order-totals">
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <span>₹{{ subtotal }}</span>
+        </div>
+        <div class="total-row">
+          <span>Tax (5%):</span>
+          <span>₹{{ tax }}</span>
+        </div>
+        <div class="total-row">
+          <span>Delivery:</span>
+          <span>₹{{ deliveryFee }}</span>
+        </div>
+        <div class="total-row final-total">
+          <span>Total Amount:</span>
+          <span>₹{{ grandTotal }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="payment-methods">
+      <h2>Choose Payment Method</h2>
+      
+      <div class="payment-options">
+        <div class="payment-option" 
+             [class.selected]="selectedPaymentMethod === 'wallet'"
+             (click)="selectPaymentMethod('wallet')">
+          <div class="option-details">
+            <h3>Wallet Balance</h3>
+            <p>Available: ₹{{ userBalance }}</p>
+            <span *ngIf="userBalance < grandTotal" class="insufficient">Insufficient Balance</span>
+          </div>
+        </div>
+
+        <div class="payment-option"
+             [class.selected]="selectedPaymentMethod === 'card'"
+             (click)="selectPaymentMethod('card')">
+          <div class="option-details">
+            <h3>Credit/Debit Card</h3>
+            <p>Visa, MasterCard, RuPay</p>
+          </div>
+        </div>
+
+        <div class="payment-option"
+             [class.selected]="selectedPaymentMethod === 'upi'"
+             (click)="selectPaymentMethod('upi')">
+          <div class="option-details">
+            <h3>UPI Payment</h3>
+            <p>PhonePe, GooglePay, Paytm</p>
+          </div>
+        </div>
+
+        <div class="payment-option"
+             [class.selected]="selectedPaymentMethod === 'netbanking'"
+             (click)="selectPaymentMethod('netbanking')">
+          <div class="option-details">
+            <h3>Net Banking</h3>
+            <p>All major banks supported</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Form -->
+    <div class="payment-form" *ngIf="selectedPaymentMethod">
+      
+      <!-- Wallet Payment -->
+      <div *ngIf="selectedPaymentMethod === 'wallet'" class="wallet-payment">
+        <h3>Wallet Payment</h3>
+        <div class="wallet-info">
+          <p>Amount to pay: <strong>₹{{ grandTotal }}</strong></p>
+          <p>Your balance: <strong>₹{{ userBalance }}</strong></p>
+          <div *ngIf="userBalance >= grandTotal" class="success-msg">
+             Sufficient balance available
+          </div>
+          <div *ngIf="userBalance < grandTotal" class="error-msg">
+            Insufficient balance. Please add ₹{{ grandTotal - userBalance }} more.
+            <a routerLink="/deposit" class="add-money-link">Add Money</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Payment -->
+      <div *ngIf="selectedPaymentMethod === 'card'" class="card-payment">
+        <h3>Card Details</h3>
+        <form class="card-form">
+          <div class="form-group">
+            <label>Card Number</label>
+            <input type="text" placeholder="1234 5678 9012 3456" [(ngModel)]="cardDetails.number" name="cardNumber">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiry</label>
+              <input type="text" placeholder="MM/YY" [(ngModel)]="cardDetails.expiry" name="expiry">
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" placeholder="123" [(ngModel)]="cardDetails.cvv" name="cvv">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Cardholder Name</label>
+            <input type="text" placeholder="John Doe" [(ngModel)]="cardDetails.name" name="holderName">
+          </div>
+        </form>
+      </div>
+
+      <!-- UPI Payment -->
+      <div *ngIf="selectedPaymentMethod === 'upi'" class="upi-payment">
+        <h3>UPI Payment</h3>
+        <div class="form-group">
+          <label>UPI ID</label>
+          <input type="text" placeholder="yourname@paytm" [(ngModel)]="upiId" name="upiId">
+        </div>
+        <div class="qr-section">
+          <p>Or scan QR code to pay</p>
+          <div class="qr-code"> QR Code</div>
+        </div>
+      </div>
+
+      <!-- Net Banking -->
+      <div *ngIf="selectedPaymentMethod === 'netbanking'" class="netbanking-payment">
+        <h3>Select Your Bank</h3>
+        <select [(ngModel)]="selectedBank" name="bank" class="bank-select">
+          <option value="">Choose Bank</option>
+          <option value="sbi">State Bank of India</option>
+          <option value="hdfc">HDFC Bank</option>
+          <option value="icici">ICICI Bank</option>
+          <option value="axis">Axis Bank</option>
+          <option value="pnb">Punjab National Bank</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Payment Actions -->
+    <div class="payment-actions">
+      <button class="back-btn" routerLink="/cart">← Back to Cart</button>
+      <button class="pay-btn" 
+              [disabled]="!canProceedPayment()" 
+              (click)="processPayment()"
+              [class.processing]="isProcessing">
+        <span *ngIf="!isProcessing">Pay ₹{{ grandTotal }}</span>
+        <span *ngIf="isProcessing">Processing...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div *ngIf="isProcessing" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p>Processing your payment...</p>
+  </div>
+</div>

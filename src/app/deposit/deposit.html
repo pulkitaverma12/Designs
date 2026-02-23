@@ -1,0 +1,126 @@
+<div class="deposit-container">
+  <div class="deposit-header">
+    <h1> Add Money to Wallet</h1>
+    <p>Quick and secure way to add money to your account</p>
+  </div>
+
+  <div class="deposit-content">
+    <!-- Current Balance -->
+    <!-- <div class="balance-card">
+      <div class="balance-info">
+        <h3>Current Balance</h3>
+        <p class="current-balance">₹{{ currentBalance }}</p>
+      </div>
+    </div> -->
+
+    <!-- Quick Amount Buttons -->
+    <!-- <div class="quick-amounts">
+      <h3> Quick Add</h3>
+      <div class="amount-buttons">
+        <button 
+          *ngFor="let amount of quickAmounts" 
+          class="amount-btn"
+          (click)="selectAmount(amount)">
+          ₹{{ amount }}
+        </button>
+      </div>
+    </div> -->
+
+    <!-- Custom Amount -->
+    <div class="custom-amount">
+      <h3>Custom Amount</h3>
+      <div class="amount-input-container">
+        <span class="currency-symbol">₹</span>
+        <input 
+          type="number" 
+          class="amount-input"
+          [(ngModel)]="customAmount"
+          placeholder="Enter amount"
+          min="10"
+          max="10000">
+      </div>
+      <button 
+        class="custom-amount-btn"
+        (click)="selectAmount(customAmount)"
+        [disabled]="!isValidAmount(customAmount)">
+        Add ₹{{ customAmount || 0 }}
+      </button>
+    </div>
+
+    <!-- Selected Amount Display -->
+    <div *ngIf="selectedAmount > 0" class="selected-amount">
+      <div class="amount-summary">
+        <h3>Payment Summary</h3>
+        <div class="summary-row">
+          <span>Amount to Add:</span>
+          <span class="amount">₹{{ selectedAmount }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Processing Fee:</span>
+          <span class="amount">₹{{ processingFee }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total Amount:</span>
+          <span class="amount">₹{{ totalAmount }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div *ngIf="selectedAmount > 0" class="payment-methods">
+      <h3>Choose Payment Method</h3>
+      <div class="payment-options">
+        <div 
+          *ngFor="let method of paymentMethods" 
+          class="payment-option"
+          [class.selected]="selectedPaymentMethod === method.id"
+          (click)="selectPaymentMethod(method.id)">
+          <div class="payment-icon">{{ method.icon }}</div>
+          <div class="payment-info">
+            <h4>{{ method.name }}</h4>
+            <p>{{ method.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div *ngIf="selectedAmount > 0" class="action-buttons">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-message">
+        <p>{{ errorMessage }}</p>
+      </div>
+      
+      <div class="button-row">
+        <button 
+          class="btn btn-primary add-money-btn"
+          (click)="addMoney()"
+          [disabled]="!selectedPaymentMethod || isProcessing">
+          {{ isProcessing ? 'Processing...' : ' Add Money' }}
+        </button>
+        <button class="btn btn-secondary" (click)="resetForm()">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="transaction-history">
+      <h3>Recent Transactions</h3>
+      <div class="transaction-list">
+        <div *ngFor="let transaction of recentTransactions" class="transaction-item">
+          <div class="transaction-icon">
+            {{ transaction.type === 'credit' ? '' : '' }}
+          </div>
+          <div class="transaction-details">
+            <h4>{{ transaction.description }}</h4>
+            <p>{{ transaction.date | date:'medium' }}</p>
+          </div>
+          <div class="transaction-amount" [class.credit]="transaction.type === 'credit'">
+            {{ transaction.type === 'credit' ? '+' : '-' }}₹{{ transaction.amount }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

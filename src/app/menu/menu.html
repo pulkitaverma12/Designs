@@ -1,0 +1,57 @@
+<div class="menu-container">
+  <div class="menu-header">
+    <h1>Our Delicious Menu</h1>
+    <p>Choose from our wide variety of fresh and tasty items from TheMealDB API</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading delicious meals...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="loadRandomMeals()">Try Again</button>
+  </div>
+
+  <!-- Categories -->
+  <div *ngIf="!loading && !error" class="categories">
+    <button 
+      *ngFor="let category of categories" 
+      class="category-btn"
+      [class.active]="selectedCategory === category"
+      (click)="selectCategory(category)">
+      {{ category }}
+    </button>
+  </div>
+
+  <!-- Menu Items -->
+  <div *ngIf="!loading && !error" class="menu-grid">
+    <div *ngFor="let item of menuItems" class="menu-item">
+      <div class="item-image">
+        <img [src]="item.image" [alt]="item.name" />
+      </div>
+      <div class="item-details">
+        <h3>{{ item.name }}</h3>
+        <p class="item-description">{{ item.description }}</p>
+        <p class="item-area" *ngIf="item.area">{{ item.area }} Cuisine</p>
+        <div class="item-footer">
+          <span class="price">₹{{ item.price }}</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" (click)="decreaseQuantity(item)">-</button>
+            <span class="quantity">{{ item.quantity || 0 }}</span>
+            <button class="qty-btn" (click)="increaseQuantity(item)">+</button>
+          </div>
+        </div>
+        <button 
+          *ngIf="(item.quantity || 0) > 0" 
+          class="add-to-cart-btn"
+          (click)="addToCart(item)">
+          Add to Cart 
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

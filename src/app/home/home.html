@@ -1,0 +1,61 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1> Welcome to CafeDelight </h1>
+      <p class="hero-subtitle">Fresh Food, Great Taste, Amazing Experience!</p>
+      
+      <div class="hero-buttons">
+        <a routerLink="/menu" class="btn btn-primary"> Order Now</a>
+        <a routerLink="/deposit" class="btn"> Add Money</a>
+      </div>
+    </div>
+    <div class="hero-content">
+      <img src="c20.jpeg" alt="Delicious Food" style="height: 400px;">
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <h2>Why Choose Us?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>Fresh Food</h3>
+        <p>Daily fresh ingredients and delicious recipes</p>
+      </div>
+      <div class="feature-card">
+        <h3>Quick Service</h3>
+        <p>Fast ordering and delivery within minutes</p>
+      </div>
+      <div class="feature-card">
+        <h3>Easy Payment</h3>
+        <p>Multiple payment options and digital wallet</p>
+      </div>
+      <div class="feature-card">
+        <h3>Great Offers</h3>
+        <p>Daily deals and special discount offers</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular Items Preview -->
+  <div class="popular-section">
+    <h2>Today's Special</h2>
+    
+    <div *ngIf="loading" class="loading-specials">
+      <div class="loading-spinner"></div>
+      <p>Loading today's specials...</p>
+    </div>
+    
+    <div *ngIf="!loading" class="popular-grid">
+      <div *ngFor="let special of todaysSpecials" class="popular-item">
+        <div class="special-image">
+          <img [src]="special.image" [alt]="special.name" />
+        </div>
+        <h4>{{ special.name }}</h4>
+        <p class="cuisine">{{ special.area }} Cuisine</p>
+        <p class="price">₹{{ special.price }}</p>
+      </div>
+    </div>
+  </div>
+</div>

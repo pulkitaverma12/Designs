@@ -1,0 +1,73 @@
+<div class="cart-container">
+  <header class="cart-header">
+    <h1 style="padding-left: 30%;">Your Basket of Happiness</h1>
+    <!-- <div class="balance-info">
+      <span class="balance">Balance: ₹{{ userBalance }}</span>
+    </div> -->
+  </header>
+
+  <div class="cart-content">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <h2>Your cart is empty</h2>
+      <p>Choose your favorite food from the menu</p>
+      <a routerLink="/menu" class="continue-shopping-btn">View Menu</a>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div class="cart-summary">
+        <h2>Total Items: {{ getTotalItems() }}</h2>
+        <button (click)="clearCart()" class="clear-cart-btn">Clear Cart</button>
+      </div>
+
+      <div class="items-list">
+        <div *ngFor="let item of cartItems" class="cart-item">
+          <div class="item-image">
+            <img [src]="item.image" [alt]="item.name" />
+          </div>
+          
+          <div class="item-details">
+            <h3>{{ item.name }}</h3>
+            <p class="item-price">₹{{ item.price }}</p>
+          </div>
+          
+          <div class="quantity-controls">
+            <button (click)="decreaseQuantity(item)" class="qty-btn">-</button>
+            <span class="quantity">{{ item.quantity }}</span>
+            <button (click)="increaseQuantity(item)" class="qty-btn">+</button>
+          </div>
+          
+          <div class="item-total">
+            <span>₹{{ item.price * item.quantity }}</span>
+            <button (click)="removeItem(item.id)" class="remove-btn">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-footer">
+        <div class="total-section">
+          <div class="total-row">
+            <span>Total Amount:</span>
+            <span class="total-amount">₹{{ totalAmount }}</span>
+          </div>
+          <div class="balance-check" [class.insufficient]="userBalance < totalAmount">
+            <span>Available Balance: ₹{{ userBalance }}</span>
+            <span *ngIf="userBalance < totalAmount" class="insufficient-msg">
+              Insufficient balance! Need ₹{{ totalAmount - userBalance }} more
+            </span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <a routerLink="/menu" class="continue-shopping">Continue Shopping</a>
+          <a routerLink="/deposit" class="add-money-btn">Add Money</a>
+          <button 
+            (click)="proceedToPayment()" 
+            class="checkout-btn"
+          >
+            Proceed to Payment → 
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<!-- Cafeteria Management System -->
+<header class="navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <h1> CafeDelight</h1>
+    </div>
+    <nav class="nav-links">
+      <a routerLink="/home" routerLinkActive="active"> Home</a>
+      <a routerLink="/menu" routerLinkActive="active"> Menu</a>
+      <a routerLink="/cart" routerLinkActive="active"> Cart </a>
+      <a routerLink="/deposit" routerLinkActive="active"> Deposit</a>
+      <a routerLink="/payment" routerLinkActive="active"> Payment</a>
+    </nav>
+    <!-- <div class="user-info">
+      <span class="balance">Balance: ₹{{ userBalance() }}</span>
+    </div> -->
+  </div>
+</header>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="footer">
+  <div class="footer-content">
+    <p>&copy; 2025 CafeDelight. Fresh Food, Great Taste!</p>
+  </div>
+</footer>
